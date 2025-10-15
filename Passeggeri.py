@@ -5,4 +5,4 @@ class Passeggeri:
         self.cognome = cognome
         self.cabina_assegnata=None
     def __str__(self):
-        return f"{self.codice} {self.nome} {self.cognome}
+        return f"{self.codice} {self.nome} {self.cognome}"

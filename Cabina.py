@@ -4,6 +4,7 @@ class Cabine:
         self.num_letti=num_letti
         self.ponte=ponte
         self.prezzo=prezzo
+        self.occupata= False
     def prezzo_finale(self):
         return self.prezzo
     def __str__(self):
