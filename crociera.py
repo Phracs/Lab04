@@ -16,33 +16,35 @@ class Crociera:
     def carica_file_dati(self, file_path):
         """Carica i dati (cabine e passeggeri) dal file"""
         # TODO
-        with open(file_path, 'r', encoding='utf-8') as infile:
-            reader=csv.reader(infile)
-            for row in reader:
-                if row and row[0].startswith("CAB"):
-                    if len(row) == 4:
+        try:
+            with open(file_path, 'r', encoding='utf-8') as infile:
+                reader=csv.reader(infile)
+                for row in reader:
+                    if row and row[0].startswith("CAB"):
+                        if len(row) == 4:
+                            codice = row[0]
+                            num_letti = row[1]
+                            ponte = row[2]
+                            prezzo = row[3]
+                            cab=Cabina.Cabine(codice, int(num_letti), int(ponte), float(prezzo))
+                            self.cabine[codice] = cab
+                        if len(row) == 5:
+                            codice, num_letti, ponte, prezzo, extra = row
+                            try:
+                                num_animali = int(extra)
+                                cab = Cabina.Cabina_Animali(codice, int(num_letti), int(ponte), float(prezzo), num_animali)
+                            except ValueError:
+                                stile=extra
+                                cab = Cabina.Cabina_Deluxe(codice, int(num_letti), int(ponte), float(prezzo), stile)
+                            self.cabine[codice] = cab
+                    elif row and row[0].startswith("P"):
                         codice = row[0]
-                        num_letti = row[1]
-                        ponte = row[2]
-                        prezzo = row[3]
-                        cab=Cabina.Cabine(codice, int(num_letti), int(ponte), float(prezzo))
-                        self.cabine[codice] = cab
-                    if len(row) == 5:
-                        codice, num_letti, ponte, prezzo, extra = row
-                        try:
-                            num_animali = int(extra)
-                            cab = Cabina.Cabina_Animali(codice, int(num_letti), int(ponte), float(prezzo), num_animali)
-                        except ValueError:
-                            stile=extra
-                            cab = Cabina.Cabina_Deluxe(codice, int(num_letti), int(ponte), float(prezzo), stile)
-                        self.cabine[codice] = cab
-                elif row and row[0].startswith("P"):
-                    codice = row[0]
-                    nome= row[1]
-                    cognome= row[2]
-                    pas=Passeggeri.Passeggeri(codice, nome, cognome)
-                    self.passeggeri[codice] = pas
-
+                        nome= row[1]
+                        cognome= row[2]
+                        pas=Passeggeri.Passeggeri(codice, nome, cognome)
+                        self.passeggeri[codice] = pas
+        except FileNotFoundError:
+            raise FileNotFoundError("File not found")
 
 
 
